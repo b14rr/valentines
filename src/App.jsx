@@ -9,6 +9,7 @@ function App() {
   const confettiCanvasRef = useRef(null)
 
   const noBtnRef = useRef(null)
+  const containerRef = useRef(null)
 
   // Floating Hearts logic
   const [hearts, setHearts] = useState([])
@@ -26,21 +27,27 @@ function App() {
   }, [])
 
   // Runaway No Button Logic
+  // Runaway No Button Logic
   const moveButton = () => {
-    // Dynamic dimensions
-    const btnRect = noBtnRef.current?.getBoundingClientRect()
-    const btnWidth = btnRect ? btnRect.width : 100
-    const btnHeight = btnRect ? btnRect.height : 50
-    const padding = 50 // Increased padding for safety
+    if (!noBtnRef.current) return
 
+    // Dynamic dimensions
+    const btnRect = noBtnRef.current.getBoundingClientRect()
+    const btnWidth = btnRect.width
+    const btnHeight = btnRect.height
+
+    // Use viewport dimensions
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
 
+    const padding = 20 // Keep it away from the absolute edges
+
     // Ensure strictly positive range
+    // We calculate available space for the top-left corner
     const maxX = Math.max(0, viewportWidth - btnWidth - padding)
     const maxY = Math.max(0, viewportHeight - btnHeight - padding)
 
-    // Generate random position within safe bounds [padding, maxX]
+    // Generate random position within bounds [padding, maxX]
     const randomX = Math.random() * (maxX - padding) + padding
     const randomY = Math.random() * (maxY - padding) + padding
 
@@ -143,7 +150,7 @@ function App() {
       </div>
 
       {!yesPressed ? (
-        <div className="container">
+        <div className="container" ref={containerRef}>
           <img src={valentineImg} alt="Us" className="valentine-img" />
           <h1>Will you be my Valentine? 💗</h1>
           <div className="buttons">
